@@ -1,6 +1,6 @@
 {
     "name": "@splitflow/core",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Splitflow core package",
     "author": "team@splitflow.io",
     "homepage": "https://github.com/splitflow/core#readme",
@@ -21,6 +21,10 @@
         "./ast": {
             "import": "./dist/ast/index.js",
             "require": "./dist/ast/index.cjs"
+        },
+        "./style": {
+            "import": "./dist/style/index.js",
+            "require": "./dist/style/index.cjs"
         },
         "./utils/object": {
             "import": "./dist/utils/object.js",
@@ -47,6 +51,9 @@
         "*": {
             "ast": [
                 "dist/ast/index.d.ts"
+            ],
+            "style": [
+                "dist/style/index.d.ts"
             ],
             "utils/object": [
                 "dist/utils/object.d.ts"

@@ -14,37 +14,37 @@ export interface DefinitionNode {
 }
 
 export interface PaddingNode {
-    top: number
-    left: number
-    bottom: number
-    right: number
+    top?: number
+    left?: number
+    bottom?: number
+    right?: number
 }
 
 export interface CornerNode {
-    topLeft: number
-    topRight: number
-    bottomLeft: number
-    bottomRight: number
+    topLeft?: number
+    topRight?: number
+    bottomLeft?: number
+    bottomRight?: number
 }
 
 export interface BorderNode {
-    color: number[]
-    tickness: number
+    color?: number[]
+    tickness?: number
 }
 
 export interface BackgroundNode {
-    color: number[]
+    color?: number[]
 }
 
 export interface SizeNode {
-    width: number
-    height: number
+    width?: number
+    height?: number
 }
 
 export interface TypographyNode {
-    fontWeight: number
-    fontSize: number
-    color: number[]
+    fontWeight?: number
+    fontSize?: number
+    color?: number[]
 }
 
 export interface LayoutNode {
