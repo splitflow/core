@@ -6,6 +6,7 @@ import {
     DefinitionNode,
     LayoutNode,
     PaddingNode,
+    PositionNode,
     RootNode,
     SizeNode,
     TypographyNode
@@ -18,39 +19,28 @@ export class ASTToCSSVisitor {
         return Object.entries(root).reduce((rules, [definitionName, definition]) => {
             if (definitionName === 'type') return rules
 
-            const properties = this.definition(definition)
-            if (isNotEmpty(properties)) {
-                rules[selector(definitionName)] = properties
-            }
-
-            const childProperties = this.definition(definition, true)
-            if (isNotEmpty(childProperties)) {
-                rules[selector(definitionName, true)] = childProperties
+            for (const [selectorText, style] of this.definition(definition)) {
+                rules[selector(definitionName, selectorText)] = style
             }
             return rules
         }, {})
     }
 
-    definition(definition: DefinitionNode, child = false) {
-        if (child) {
-            return {
-                ...this.layout(definition.layout, true)
-            }
-        }
-
-        return {
-            ...this.padding(definition.padding),
-            ...this.corner(definition.corner),
-            ...this.border(definition.border),
-            ...this.backgroud(definition.background),
-            ...this.size(definition.size),
-            ...this.typography(definition.typography),
-            ...this.layout(definition.layout)
-        }
+    definition(definition: DefinitionNode) {
+        return ruleEntries([
+            this.padding(definition.padding),
+            this.corner(definition.corner),
+            this.border(definition.border),
+            this.background(definition.background),
+            this.size(definition.size),
+            this.typography(definition.typography),
+            this.layout(definition.layout),
+            this.position(definition.position)
+        ])
     }
 
-    corner(corner: CornerNode) {
-        return clean({
+    *corner(corner: CornerNode) {
+        yield* ruleEntry({
             'border-top-left-radius': property(corner && corner.topLeft, 'rem'),
             'border-top-right-radius': property(corner && corner.topRight, 'rem'),
             'border-bottom-left-radius': property(corner && corner.bottomLeft, 'rem'),
@@ -58,22 +48,22 @@ export class ASTToCSSVisitor {
         })
     }
 
-    border(border: BorderNode) {
-        return clean({
+    *border(border: BorderNode) {
+        yield* ruleEntry({
             'border-color': property(border && border.color, hsl),
             'border-width': property(border && border.tickness, 'rem'),
             'border-style': property(border && 'solid')
         })
     }
 
-    backgroud(backgroud: BackgroundNode) {
-        return clean({
-            'background-color': property(backgroud && backgroud.color, hsl)
+    *background(background: BackgroundNode) {
+        yield* ruleEntry({
+            'background-color': property(background && background.color, hsl)
         })
     }
 
-    padding(padding: PaddingNode) {
-        return clean({
+    *padding(padding: PaddingNode) {
+        yield* ruleEntry({
             'padding-top': property(padding && padding.top, 'rem'),
             'padding-bottom': property(padding && padding.bottom, 'rem'),
             'padding-left': property(padding && padding.left, 'rem'),
@@ -81,45 +71,106 @@ export class ASTToCSSVisitor {
         })
     }
 
-    size(size: SizeNode) {
-        return clean({
-            width: property(size && size.width, 'rem'),
-            height: property(size && size.height, 'rem')
+    /**
+     * Size is styled with min and max values to avoid conflicts with position
+     */
+    *size(size: SizeNode) {
+        yield* ruleEntry({
+            'min-width':
+                property(size && size.minWidth, 'rem') || property(size && size.width, 'rem'),
+            'max-width':
+                property(size && size.maxWidth, 'rem') || property(size && size.width, 'rem'),
+            'min-height':
+                property(size && size.minHeight, 'rem') || property(size && size.height, 'rem'),
+            'max-height':
+                property(size && size.maxHeight, 'rem') || property(size && size.height, 'rem'),
+            'aspect-ratio': property(size && size.aspectRatio, '/1')
         })
     }
 
-    typography(typography: TypographyNode) {
-        return clean({
+    *typography(typography: TypographyNode) {
+        yield* ruleEntry({
             'font-size': property(typography && typography.fontSize, 'rem'),
             'font-weight': property(typography && typography.fontWeight),
             color: property(typography && typography.color, hsl)
         })
     }
 
-    layout(layout: LayoutNode, child = false) {
-        if (child) {
-            return clean({
-                'flex-grow': property(layout && layout.mainAxisAlignment, (v) =>
-                    v === 'stretch' ? '1' : 'unset'
-                ),
-                'flex-basis': property(layout && layout.mainAxisAlignment, (v) =>
-                    v === 'stretch' ? '0' : 'unset'
-                )
-            })
-        }
-
-        return clean({
+    *layout(layout: LayoutNode) {
+        yield* ruleEntry({
             display: property(layout && 'flex'),
             'flex-direction': property(layout && layout.direction),
             'justify-content': property(layout && layout.mainAxisAlignment, (v) => {
-                if (v === 'stretch') return 'unset'
+                if (v === 'stretch') return 'flex-start'
                 if (v === 'start' || v === 'end') return `flex-${v}`
                 return v
             }),
-            'align-items': property(layout && layout.crossAxisAlignment),
+            'align-items': property(layout && layout.crossAxisAlignment, (v) => {
+                if (v === 'start' || v === 'end') return `flex-${v}`
+                return v
+            }),
             gap: property(layout && layout.spacing, 'rem')
         })
+
+        yield* ruleEntry('> *', {
+            'flex-grow': property(layout && layout.mainAxisAlignment, (v) =>
+                v === 'stretch' ? '1' : null
+            ),
+            'flex-basis': property(layout && layout.mainAxisAlignment, (v) =>
+                v === 'stretch' ? '0' : null
+            ),
+            'margin-left': property(layout && layout.direction, (v) =>
+                v === 'column' ? '!unset' : null
+            ),
+            'margin-right': property(layout && layout.direction, (v) =>
+                v === 'column' ? '!unset' : null
+            ),
+            'margin-top': property(layout && layout.direction, (v) =>
+                v === 'row' ? '!unset' : null
+            ),
+            'margin-bottom': property(layout && layout.direction, (v) =>
+                v === 'row' ? '!unset' : null
+            ),
+            width: property(layout && layout.direction, (v) => (v === 'column' ? '!unset' : null)),
+            height: property(layout && layout.direction, (v) => (v === 'row' ? '!unset' : null))
+        })
     }
+
+    *position(position: PositionNode) {
+        yield* ruleEntry({
+            'margin-right': property(position && position.mainAxisAlignment, (v) =>
+                v === 'start' || v === 'center' ? 'auto' : null
+            ),
+            'margin-left': property(position && position.mainAxisAlignment, (v) =>
+                v === 'end' || v === 'center' ? 'auto' : null
+            ),
+            'margin-bottom': property(position && position.mainAxisAlignment, (v) =>
+                v === 'start' || v === 'center' ? 'auto' : null
+            ),
+            'margin-top': property(position && position.mainAxisAlignment, (v) =>
+                v === 'end' || v === 'center' ? 'auto' : null
+            ),
+            'flex-grow':
+                property(position && position.mainAxisSize, () => '!unset') ||
+                property(position && position.mainAxisAlignment, (v) =>
+                    v === 'stretch' ? '1' : null
+                ),
+            'flex-basis': property(position && position.mainAxisSize, () => '!unset'),
+            'align-self': property(position && position.crossAxisAlignment, (v) => {
+                if (v === 'start' || v === 'end') return `flex-${v}`
+                return v
+            }),
+            width: property(position && position.mainAxisSize, '%'),
+            height: property(position && position.mainAxisSize, '%')
+        })
+    }
+}
+
+export function cssProperyValue(value: string) {
+    if (value.charAt(0) === '!') {
+        return [value.slice(1), 'important']
+    }
+    return [value]
 }
 
 function hsl(color: number[]) {
@@ -132,10 +183,10 @@ function property(value, format: any) {
     if (value === null || value === undefined) return value
     if (typeof format === 'function') return format(value)
     if (format) return value + format
-    return value
+    return value + ''
 }
 
-function selector(definitionName, child = false) {
+function selector(definitionName: string, selectorText: string) {
     const [componentToken, elementToken] = definitionName.split('-')
     const [componentName, componentVariant] = componentToken.split(':')
     const [elementName, elementVariant] = elementToken.split(':')
@@ -145,16 +196,14 @@ function selector(definitionName, child = false) {
     if (componentVariant) {
         selector.push(elementSelector(componentName) + variantSelector(componentVariant))
     }
+
     selector.push(elementSelector(componentName, elementName) + variantSelector(elementVariant))
-    if (child) {
-        selector.push(childSelector())
+
+    if (selectorText) {
+        selector.push(selectorText)
     }
 
     return selector.join(' ')
-}
-
-function childSelector() {
-    return '> *'
 }
 
 function elementSelector(componentName: string, elementName = 'root') {
@@ -167,4 +216,26 @@ function variantSelector(variantName: string) {
     if (variantName === 'odd') return ':nth-child(2n+1)'
     if (variantName) return `.${variantName}`
     return ''
+}
+
+function ruleEntry(style: object): Generator<[string, object]>
+function ruleEntry(selector: string, style: object): Generator<[string, object]>
+function* ruleEntry(arg1: any, arg2?: object): Generator<[string, object]> {
+    const selector = typeof arg1 === 'string' ? arg1 : null
+    const style = clean(arg2 ?? arg1)
+    if (isNotEmpty(style)) yield [selector, style]
+}
+
+function ruleEntries(entries: Generator<[string, object]>[]) {
+    const result = new Map<string, object>()
+
+    for (const entryGenerator of entries) {
+        for (const [selector, style] of entryGenerator) {
+            result.set(
+                selector,
+                result.has(selector) ? { ...result.get(selector), ...style } : style
+            )
+        }
+    }
+    return result.entries()
 }

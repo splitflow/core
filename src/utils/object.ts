@@ -88,10 +88,27 @@ export function setLeafs(object: object, value: any) {
     return object
 }
 
-export function filter(object: object, key: string) {
-    if (key) {
-        return { [key]: object[key] }
+export function filter(object: object, predicate: string | string[]) {
+    if (typeof predicate === 'string') {
+        const key = predicate
+        const value = object[key]
+        if (value !== undefined) {
+            return { [key]: object[key] }
+        }
+        return {}
     }
+
+    if (Array.isArray(predicate)) {
+        const result = {}
+        for (const key of predicate) {
+            const value = object[key]
+            if (value !== undefined) {
+                result[key] = value
+            }
+        }
+        return result
+    }
+
     return object
 }
 

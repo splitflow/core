@@ -11,6 +11,7 @@ export interface DefinitionNode {
     size?: SizeNode
     typography?: TypographyNode
     layout?: LayoutNode
+    position?: PositionNode
 }
 
 export interface PaddingNode {
@@ -38,7 +39,12 @@ export interface BackgroundNode {
 
 export interface SizeNode {
     width?: number
+    minWidth?: number
+    maxWidth?: number
     height?: number
+    minHeight?: number
+    maxHeight?: number
+    aspectRatio?: number
 }
 
 export interface TypographyNode {
@@ -61,6 +67,12 @@ export interface LayoutNode {
     spacing: number
 }
 
+export interface PositionNode {
+    mainAxisAlignment: 'start' | 'end' | 'center' | 'stretch' | 'shrink'
+    crossAxisAlignment: 'start' | 'end' | 'center' | 'stretch'
+    mainAxisSize?: number
+}
+
 export const AST = {
     padding: {
         all: [2, 0, 100, 1, 'rem']
@@ -72,7 +84,8 @@ export const AST = {
         tickness: [1, 0, 10, 0.1, 'rem']
     },
     size: {
-        all: [2, 0, 100, 1, 'rem']
+        all: [2, 0, 100, 1, 'rem'],
+        aspectRatio: [1, 0, 10, 0.1, '/1']
     },
     typography: {
         fontSize: [2, 0, 10, 0.25, 'rem'],
@@ -91,6 +104,11 @@ export const AST = {
         ],
         crossAxisAlignment: ['start', 'end', 'center', 'stretch'],
         spacing: [2, 0, 100, 1, 'rem']
+    },
+    position: {
+        mainAxisAlignment: ['start', 'end', 'center', 'stretch', 'shrink'],
+        crossAxisAlignment: ['start', 'end', 'center', 'stretch'],
+        mainAxisSize: [0, 0, 100, 10, '%'],
     }
 }
 
@@ -101,5 +119,6 @@ export const featureNames = [
     'background',
     'size',
     'typography',
-    'layout'
+    'layout',
+    'position'
 ]
