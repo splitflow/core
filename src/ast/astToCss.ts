@@ -193,11 +193,14 @@ function selector(definitionName: string, selectorText: string) {
 
     let selector = []
 
-    if (componentVariant) {
+    if (elementName === 'root' && componentVariant) {
         selector.push(elementSelector(componentName) + variantSelector(componentVariant))
+    } else if (componentVariant) {
+        selector.push(elementSelector(componentName) + variantSelector(componentVariant))
+        selector.push(elementSelector(componentName, elementName) + variantSelector(elementVariant))
+    } else {
+        selector.push(elementSelector(componentName, elementName) + variantSelector(elementVariant))
     }
-
-    selector.push(elementSelector(componentName, elementName) + variantSelector(elementVariant))
 
     if (selectorText) {
         selector.push(selectorText)

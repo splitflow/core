@@ -1,6 +1,6 @@
 
 import { describe, expect, it } from 'vitest'
-import { addDigit, bound, trunc } from '../src/utils/number'
+import { addDigit, bound, trunc } from '../../src/utils/number'
 
 describe('number', () => {
     it('.addDigit()', () => {

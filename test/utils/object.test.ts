@@ -1,6 +1,6 @@
 
 import { describe, expect, it } from 'vitest'
-import { merge, mergeObject } from '../src/utils/object'
+import { merge, mergeObject } from '../../src/utils/object'
 
 describe('object', () => {
     it('.merge() null keep property', () => {
