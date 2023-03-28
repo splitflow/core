@@ -45,7 +45,8 @@ export class ASTToCSSVisitor {
             'border-top-left-radius': property(corner && corner.topLeft, 'rem'),
             'border-top-right-radius': property(corner && corner.topRight, 'rem'),
             'border-bottom-left-radius': property(corner && corner.bottomLeft, 'rem'),
-            'border-bottom-right-radius': property(corner && corner.bottomRight, 'rem')
+            'border-bottom-right-radius': property(corner && corner.bottomRight, 'rem'),
+            'overflow': property(corner && any(corner), () => 'hidden')
         })
     }
 
@@ -188,6 +189,15 @@ function property(value, format: any) {
     if (typeof format === 'function') return format(value)
     if (format) return value + format
     return value + ''
+}
+
+function any(object: object) {
+    let property
+    for (let [, prop] of Object.entries(object)) {
+        if (prop !== null && prop != undefined) return prop
+        if (prop !== undefined) property = prop
+    }
+    return property
 }
 
 function selector(definitionName: string, selectorText: string) {
