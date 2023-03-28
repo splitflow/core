@@ -1,3 +1,4 @@
+import { Color } from '../theme'
 import { clean, isNotEmpty } from '../utils/object'
 import {
     BackgroundNode,
@@ -173,8 +174,11 @@ export function cssProperyValue(value: string) {
     return [value]
 }
 
-function hsl(color: number[]) {
-    return `hsl(${color[0]}, ${color[1]}%, ${color[2]}%)`
+function hsl(color: Color) {
+    const h = typeof color[0] == 'string' ? `var(--${color[0].slice(1)}-color-h)` : color[0]
+    const s = typeof color[1] == 'string' ? `var(--${color[1].slice(1)}-color-s)` : `${color[1]}%`
+    const l = typeof color[2] == 'string' ? `var(--${color[2].slice(1)}-color-l)` : `${color[2]}%`
+    return `hsl(${h}, ${s}, ${l})`
 }
 
 function property(value, unit?: string)

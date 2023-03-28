@@ -1,3 +1,5 @@
+import { Color } from "../theme"
+
 export interface RootNode {
     type: 'fragment' | 'snapshot'
     [definitionName: string]: any
@@ -29,12 +31,12 @@ export interface CornerNode {
 }
 
 export interface BorderNode {
-    color?: number[]
+    color?: Color
     tickness?: number
 }
 
 export interface BackgroundNode {
-    color?: number[]
+    color?: Color
 }
 
 export interface SizeNode {
@@ -50,7 +52,7 @@ export interface SizeNode {
 export interface TypographyNode {
     fontWeight?: number
     fontSize?: number
-    color?: number[]
+    color?: Color
 }
 
 export interface LayoutNode {
