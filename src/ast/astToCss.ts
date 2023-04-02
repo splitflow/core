@@ -179,7 +179,8 @@ function hsl(color: Color) {
     const h = typeof color[0] == 'string' ? `var(--${color[0].slice(1)}-color-h)` : color[0]
     const s = typeof color[1] == 'string' ? `var(--${color[1].slice(1)}-color-s)` : `${color[1]}%`
     const l = typeof color[2] == 'string' ? `var(--${color[2].slice(1)}-color-l)` : `${color[2]}%`
-    return `hsl(${h}, ${s}, ${l})`
+    const a = typeof color[3] == 'string' ? `var(--${color[3].slice(1)}-color-a)` : `${color[3]}%`
+    return `hsl(${h}, ${s}, ${l}, ${a})`
 }
 
 function property(value, unit?: string)

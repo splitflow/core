@@ -21,6 +21,7 @@ export class ThemeToCSSVisitor {
             yield [`--${colorName}-color-h`, property(color, (c) => `${c[0]}`)]
             yield [`--${colorName}-color-s`, property(color, (c) => `${c[1]}%`)]
             yield [`--${colorName}-color-l`, property(color, (c) => `${c[2]}%`)]
+            yield [`--${colorName}-color-a`, property(color, (c) => `${c[3]}%`)]
         }
     }
 }

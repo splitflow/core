@@ -21,10 +21,11 @@ export function resolveColor(palette: PaletteNode, color: Color): number[] {
             return [
                 paletteColor[0],
                 paletteColor[1],
-                typeof color[2] === 'number' ? color[2] : paletteColor[2]
+                typeof color[2] === 'number' ? color[2] : paletteColor[2],
+                typeof color[3] === 'number' ? color[3] : paletteColor[3]
             ]
         }
-        return [0, 0, 0]
+        return [0, 0, 0, 100]
     }
     return color as number[]
 }
