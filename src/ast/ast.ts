@@ -50,9 +50,11 @@ export interface SizeNode {
 }
 
 export interface TypographyNode {
+    fontFamily?: string
     fontWeight?: number
     fontSize?: number
     color?: Color
+    textTransform?: string
 }
 
 export interface LayoutNode {
@@ -91,7 +93,8 @@ export const AST = {
     },
     typography: {
         fontSize: [2, 0, 10, 0.25, 'rem'],
-        fontWeight: [100, 200, 300, 400, 500, 600, 700, 800, 900]
+        fontWeight: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+        textTransform: [null, 'uppercase', 'lowercase', 'capitalize']
     },
     layout: {
         direction: ['row', 'column'],

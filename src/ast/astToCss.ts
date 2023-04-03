@@ -92,8 +92,10 @@ export class ASTToCSSVisitor {
 
     *typography(typography: TypographyNode) {
         yield* ruleEntry({
+            'font-family': property(typography && typography.fontFamily),
             'font-size': property(typography && typography.fontSize, 'rem'),
             'font-weight': property(typography && typography.fontWeight),
+            'text-transform': property(typography && typography.textTransform),
             color: property(typography && typography.color, hsl)
         })
     }

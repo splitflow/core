@@ -38,3 +38,10 @@ export function key(key: string, callback: (event: KeyboardEvent) => void) {
         }
     }
 }
+
+export function fontFamilies() {
+    const result = new Set<string>()
+
+    document.fonts.forEach((font) => result.add(font.family))
+    return [...result]
+}
