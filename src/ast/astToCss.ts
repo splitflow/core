@@ -227,7 +227,7 @@ function selector(definitionName: string, selectorText: string) {
 }
 
 function elementSelector(componentName: string, elementName = 'root') {
-    return `.${componentName}-${elementName}`
+    return `.sf-${componentName}-${elementName}`
 }
 
 function variantSelector(variantName: string) {
