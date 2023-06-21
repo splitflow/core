@@ -46,9 +46,17 @@
             "import": "./dist/utils/path.js",
             "require": "./dist/utils/path.cjs"
         },
-        "./utils/number": {
-            "import": "./dist/utils/number.js",
-            "require": "./dist/utils/number.cjs"
+        "./stores": {
+            "import": "./dist/stores.js",
+            "require": "./dist/stores.cjs"
+        },
+        "./compiler": {
+            "import": "./dist/compiler/index.js",
+            "require": "./dist/compiler/index.cjs"
+        },
+        "./definition": {
+            "import": "./dist/definition/index.js",
+            "require": "./dist/definition/index.cjs"
         }
     },
     "typesVersions": {
@@ -74,8 +82,14 @@
             "utils/path": [
                 "dist/utils/path.d.ts"
             ],
-            "utils/number": [
-                "dist/utils/number.d.ts"
+            "stores": [
+                "dist/stores.d.ts"
+            ],
+            "compiler": [
+                "dist/compiler/index.d.ts"
+            ],
+            "definition": [
+                "dist/definition/index.d.ts"
             ]
         }
     },

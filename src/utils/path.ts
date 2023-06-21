@@ -21,7 +21,7 @@ export function exists(target: object, path: string) {
     return target !== undefined
 }
 
-export function read(target: object, path: string): any {
+export function read<T>(target: object, path: string): T {
     const tokens = path.split('.')
     for (let token of tokens) {
         if (target) {
@@ -30,5 +30,5 @@ export function read(target: object, path: string): any {
         }
         break
     }
-    return target
+    return target as T
 }

@@ -31,10 +31,15 @@ export function iterate(object: object) {
 }
 
 export interface MergeOption {
-    deleteNullProps: boolean
+    deleteNullProps?: boolean
+    immutable?: boolean
 }
 
-export function merge<T>(target: T, source: T) {
+export type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+};
+
+export function merge<T>(target: T, source: DeepPartial<T>) {
     return mergeObject(target, source)
 }
 
@@ -42,7 +47,11 @@ export function mergeWithOption<T>(option: MergeOption) {
     return (target: T, source: T) => mergeObject(target, source, option)
 }
 
-export function mergeObject<T>(target: T, source: T, option?: MergeOption): T {
+export function mergeObject<T>(target: T, source: DeepPartial<T>, option?: MergeOption): T {
+    if (option?.immutable && Object.keys(source).length > 0) {
+        target = {...target}
+    }
+
     for (let sourceKey of Object.keys(source)) {
         if (sourceKey === '*') {
             for (let targetKey of Object.keys(target)) {
@@ -65,9 +74,9 @@ function mergeProperty<T>(
     const targetValue = target[targetKey]
     const sourceValue = source[sourceKey]
     if (isObject(targetValue) && isObject(sourceValue)) {
-        mergeObject(targetValue, sourceValue, option)
+        target[targetKey] = mergeObject(targetValue, sourceValue, option)
     } else if (isObject(sourceValue)) {
-        mergeObject((target[targetKey] = {}), sourceValue, option)
+        target[targetKey] = mergeObject({}, sourceValue, option)
     } else if (sourceValue === undefined) {
         // skip
     } else if (option?.deleteNullProps && sourceValue === null) {
