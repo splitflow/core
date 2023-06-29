@@ -1,10 +1,10 @@
-import { DataDef } from './def'
+import { SchemaDef } from './def'
 
 export interface BooleanDef {
     type: 'boolean'
 }
 
-export function isBooleanDef(definition: DataDef): definition is BooleanDef {
+export function isBooleanDef(definition: SchemaDef): definition is BooleanDef {
     return definition.type === 'boolean'
 }
 

@@ -18,18 +18,6 @@
         "dist/**/*.d.ts"
     ],
     "exports": {
-        "./ast": {
-            "import": "./dist/ast/index.js",
-            "require": "./dist/ast/index.cjs"
-        },
-        "./style": {
-            "import": "./dist/style/index.js",
-            "require": "./dist/style/index.cjs"
-        },
-        "./theme": {
-            "import": "./dist/theme/index.js",
-            "require": "./dist/theme/index.cjs"
-        },
         "./utils/object": {
             "import": "./dist/utils/object.js",
             "require": "./dist/utils/object.cjs"
@@ -61,15 +49,6 @@
     },
     "typesVersions": {
         "*": {
-            "ast": [
-                "dist/ast/index.d.ts"
-            ],
-            "style": [
-                "dist/style/index.d.ts"
-            ],
-            "theme": [
-                "dist/theme/index.d.ts"
-            ],
             "utils/object": [
                 "dist/utils/object.d.ts"
             ],

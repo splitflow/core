@@ -1,16 +1,16 @@
-import { DataDef } from './def'
+import { SchemaDef } from './def'
 
 export interface EnumDef<T> {
-    type: 'enum'
-    values: T[]
+    type?: never
+    enum: T[]
 }
 
-export function isEnumDef(definition: DataDef): definition is EnumDef<unknown> {
-    return definition.type === 'enum'
+export function isEnumDef<T>(definition: SchemaDef): definition is EnumDef<T> {
+    return !!(definition as EnumDef<T>).enum
 }
 
-export function enumm<T>(values: T[]): EnumDef<T> {
-    return { type: 'enum', values }
+export function enumeration<T>(values: T[]): EnumDef<T> {
+    return { enum: values }
 }
 
 export interface EnumAccessor<T> {
@@ -18,7 +18,7 @@ export interface EnumAccessor<T> {
     previous: (value: T) => T
 }
 
-export function compileEnum<T>({ values }: EnumDef<T>): EnumAccessor<T> {
+export function compileEnum<T>({ enum: values }: EnumDef<T>): EnumAccessor<T> {
     return {
         next(value: T) {
             const index = values.indexOf(value)
