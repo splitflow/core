@@ -1,3 +1,7 @@
+export function tokens(path: string) {
+    return path.split('.')
+}
+
 export function extrude(path: string, value: any) {
     const tokens = path.split('.').reverse()
     let root = value

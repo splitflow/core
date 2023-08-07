@@ -3,6 +3,7 @@ import { SchemaDef } from './def'
 export interface EnumDef<T> {
     type?: never
     enum: T[]
+    nullable?: boolean
 }
 
 export function isEnumDef<T>(definition: SchemaDef): definition is EnumDef<T> {
@@ -10,7 +11,7 @@ export function isEnumDef<T>(definition: SchemaDef): definition is EnumDef<T> {
 }
 
 export function enumeration<T>(values: T[]): EnumDef<T> {
-    return { enum: values }
+    return { enum: values, nullable: values.indexOf(null) >= 0 }
 }
 
 export interface EnumAccessor<T> {
