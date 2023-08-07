@@ -1,5 +1,16 @@
-export function isObject(value: unknown) {
+/**
+ * Compares only primitives for equality
+ */
+export function safeEqual(a: any, b: any) {
+    return a === b && (!a || typeof a !== 'object')
+}
+
+export function isObject(value: any): value is object {
     return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+export function isArray(value: any): value is any[] {
+    return Array.isArray(value)
 }
 
 export function clean(object: Object) {
@@ -9,6 +20,9 @@ export function clean(object: Object) {
     return object
 }
 
+/**
+ * @deprecated
+ */
 export function print(object: object) {
     const result = []
     for (let key of Object.keys(object)) {
@@ -19,64 +33,26 @@ export function print(object: object) {
     return result.join(' ')
 }
 
+/**
+ * @deprecated
+ */
 export function find<T>(object: object, predicate: (value: T) => boolean) {
     for (let [, property] of Object.entries(object)) {
         if (predicate(property)) return property
     }
 }
 
+/**
+ * @deprecated
+ */
 export function iterate(object: object) {
     if (object) return Object.entries(object).map(([, p]) => p)
     return []
 }
 
-export interface MergeOption {
-    deleteNullProps: boolean
-}
-
-export function merge<T>(target: T, source: T) {
-    return mergeObject(target, source)
-}
-
-export function mergeWithOption<T>(option: MergeOption) {
-    return (target: T, source: T) => mergeObject(target, source, option)
-}
-
-export function mergeObject<T>(target: T, source: T, option?: MergeOption): T {
-    for (let sourceKey of Object.keys(source)) {
-        if (sourceKey === '*') {
-            for (let targetKey of Object.keys(target)) {
-                mergeProperty(target, source, targetKey, sourceKey, option)
-            }
-        } else {
-            mergeProperty(target, source, sourceKey, sourceKey, option)
-        }
-    }
-    return target
-}
-
-function mergeProperty<T>(
-    target: T,
-    source: T,
-    targetKey: string,
-    sourceKey: string,
-    option?: MergeOption
-) {
-    const targetValue = target[targetKey]
-    const sourceValue = source[sourceKey]
-    if (isObject(targetValue) && isObject(sourceValue)) {
-        mergeObject(targetValue, sourceValue, option)
-    } else if (isObject(sourceValue)) {
-        mergeObject((target[targetKey] = {}), sourceValue, option)
-    } else if (sourceValue === undefined) {
-        // skip
-    } else if (option?.deleteNullProps && sourceValue === null) {
-        delete target[targetKey]
-    } else {
-        target[targetKey] = sourceValue
-    }
-}
-
+/**
+ * @deprecated
+ */
 export function setLeafs(object: object, value: any) {
     for (let [key, property] of Object.entries(object)) {
         if (isObject(property)) {
@@ -88,6 +64,9 @@ export function setLeafs(object: object, value: any) {
     return object
 }
 
+/**
+ * @deprecated
+ */
 export function filter(object: object, predicate: string | string[]) {
     if (typeof predicate === 'string') {
         const key = predicate
@@ -121,12 +100,44 @@ export function sort<T extends object>(object: T): T {
         }, {}) as T
 }
 
-export function isEmpty(object: object) {
-    if (object) return Object.keys(object).length === 0
+export function isEmpty(value: object | any[]) {
+    if (isArray(value)) return value.length === 0
+    if (isObject(value)) return Object.keys(value).length === 0
     return true
 }
 
-export function isNotEmpty(object: object) {
-    if (object) return Object.keys(object).length > 0
+export function isNotEmpty(value: object | any[]) {
+    if (isArray(value)) return value.length > 0
+    if (isObject(value)) return Object.keys(value).length > 0
     return false
+}
+
+export function first<T>(array: T[]) {
+    return array[0]
+}
+
+export function last<T>(array: T[]) {
+    return array[array.length - 1]
+}
+
+export function contains<T>(array: T[], value: T) {
+    return array.indexOf(value) >= 0
+}
+
+export function next<T>(array: T[], value: T): T
+export function next<T>(array: T[], predicate: (item: T) => boolean): T
+export function next<T>(array: T[], predicate: any): T {
+    const index =
+        typeof predicate === 'function' ? array.findIndex(predicate) : array.indexOf(predicate)
+    const nextIndex = index === array.length - 1 ? 0 : index + 1
+    return array[nextIndex]
+}
+
+export function previous<T>(array: T[], value: T): T
+export function previous<T>(array: T[], predicate: (item: T) => boolean): T
+export function previous<T>(array: T[], predicate: any): T {
+    const index =
+        typeof predicate === 'function' ? array.findIndex(predicate) : array.indexOf(predicate)
+    const previousIndex = index <= 0 ? array.length - 1 : index - 1
+    return array[previousIndex]
 }

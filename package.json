@@ -1,6 +1,6 @@
 {
     "name": "@splitflow/core",
-    "version": "1.3.3",
+    "version": "2.0.0",
     "description": "Splitflow core package",
     "author": "team@splitflow.io",
     "homepage": "https://github.com/splitflow/core#readme",
@@ -18,64 +18,50 @@
         "dist/**/*.d.ts"
     ],
     "exports": {
-        "./ast": {
-            "import": "./dist/ast/index.js",
-            "require": "./dist/ast/index.cjs"
+        "./utils": {
+            "import": "./dist/utils/index.js",
+            "require": "./dist/utils/index.cjs"
         },
-        "./style": {
-            "import": "./dist/style/index.js",
-            "require": "./dist/style/index.cjs"
+        "./dom": {
+            "import": "./dist/dom/index.js",
+            "require": "./dist/dom/index.cjs"
         },
-        "./theme": {
-            "import": "./dist/theme/index.js",
-            "require": "./dist/theme/index.cjs"
+        "./path": {
+            "import": "./dist/path.js",
+            "require": "./dist/path.cjs"
         },
-        "./utils/object": {
-            "import": "./dist/utils/object.js",
-            "require": "./dist/utils/object.cjs"
+        "./stores": {
+            "import": "./dist/stores.js",
+            "require": "./dist/stores.cjs"
         },
-        "./utils/collection": {
-            "import": "./dist/utils/collection.js",
-            "require": "./dist/utils/collection.cjs"
+        "./compiler": {
+            "import": "./dist/compiler/index.js",
+            "require": "./dist/compiler/index.cjs"
         },
-        "./utils/dom": {
-            "import": "./dist/utils/dom.js",
-            "require": "./dist/utils/dom.cjs"
-        },
-        "./utils/path": {
-            "import": "./dist/utils/path.js",
-            "require": "./dist/utils/path.cjs"
-        },
-        "./utils/number": {
-            "import": "./dist/utils/number.js",
-            "require": "./dist/utils/number.cjs"
+        "./definition": {
+            "import": "./dist/definition/index.js",
+            "require": "./dist/definition/index.cjs"
         }
     },
     "typesVersions": {
         "*": {
-            "ast": [
-                "dist/ast/index.d.ts"
+            "utils": [
+                "dist/utils/index.d.ts"
             ],
-            "style": [
-                "dist/style/index.d.ts"
+            "dom": [
+                "dist/dom/index.d.ts"
             ],
-            "theme": [
-                "dist/theme/index.d.ts"
+            "path": [
+                "dist/path.d.ts"
             ],
-            "utils/object": [
-                "dist/utils/object.d.ts"
+            "stores": [
+                "dist/stores.d.ts"
             ],
-            "utils/collection": [
-                "dist/utils/collection.d.ts"
+            "compiler": [
+                "dist/compiler/index.d.ts"
             ],
-            "utils/dom": [
-                "dist/utils/dom.d.ts"
-            ],
-            "utils/path": [
-                "dist/utils/path.d.ts"
-            ],
-            "utils/number": [
-                "dist/utils/number.d.ts"
+            "definition": [
+                "dist/definition/index.d.ts"
             ]
         }
     },
