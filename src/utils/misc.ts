@@ -100,13 +100,17 @@ export function sort<T extends object>(object: T): T {
         }, {}) as T
 }
 
-export function isEmpty(value: object | any[]) {
+export function list<T>(object: { [key: string]: T }): T[] {
+    return Object.values(object)
+}
+
+export function isEmpty(value: object | unknown[]) {
     if (isArray(value)) return value.length === 0
     if (isObject(value)) return Object.keys(value).length === 0
     return true
 }
 
-export function isNotEmpty(value: object | any[]) {
+export function isNotEmpty(value: object | unknown[]) {
     if (isArray(value)) return value.length > 0
     if (isObject(value)) return Object.keys(value).length > 0
     return false
