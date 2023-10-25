@@ -1,6 +1,6 @@
 {
     "name": "@splitflow/core",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "Splitflow core package",
     "author": "team@splitflow.io",
     "homepage": "https://github.com/splitflow/core#readme",
@@ -25,6 +25,10 @@
         "./dom": {
             "import": "./dist/dom/index.js",
             "require": "./dist/dom/index.cjs"
+        },
+        "./guard": {
+            "import": "./dist/guard.js",
+            "require": "./dist/guard.cjs"
         },
         "./path": {
             "import": "./dist/path.js",
@@ -51,6 +55,9 @@
             "dom": [
                 "dist/dom/index.d.ts"
             ],
+            "guard": [
+                "dist/guard.d.ts"
+            ],
             "path": [
                 "dist/path.d.ts"
             ],
@@ -74,5 +81,9 @@
         "tsup": "^6.5.0",
         "typescript": "^4.9.4",
         "vitest": "^0.27.3"
+    },
+    "dependencies": {
+        "ajv": "^8.12.0",
+        "ajv-formats": "^2.1.1"
     }
 }
