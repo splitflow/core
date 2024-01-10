@@ -62,4 +62,15 @@ describe('.merge()', () => {
             expect(result).toBe(null)
         })
     })
+    describe('with forceUpdate = true', () => {
+        it('returns new instance even if there are no ops', () => {
+            const target = { bob: { age: 30 }, alice: { age: 40 } }
+            const source = { bob: { age: 30 } }
+            const result = merge(target, source, {forceUpdate: true})
+            expect(result).to.deep.equal({ bob: { age: 30 }, alice: { age: 40 } })
+            expect(result.alice).toBe(target.alice)
+            expect(result.bob).not.toBe(target.bob)
+            expect(result).not.toBe(target)
+        })
+    })
 })

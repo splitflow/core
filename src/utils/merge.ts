@@ -2,6 +2,7 @@ import { isEmpty, isObject } from './misc'
 
 export interface MergeOption {
     deleteNullProps?: boolean
+    forceUpdate?: boolean
 }
 
 export function merge<U, V>(target: U, source: V): U & V
@@ -23,10 +24,10 @@ function mergeObject(target: object, source: object, option: MergeOption): objec
         const sourceValue = source[sourceKey]
         const mergedValue = mergeAny(targetValue, sourceValue, option)
 
-        if (mergedValue === targetValue) {
-            // skip
-        } else if (mergedValue === undefined) {
+        if (mergedValue === undefined) {
             //skip
+        } else if (mergedValue === targetValue && !option?.forceUpdate) {
+            // skip
         } else if (mergedValue === null && option?.deleteNullProps) {
             targetCopy ??= { ...target }
             delete targetCopy[sourceKey]

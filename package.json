@@ -20,31 +20,43 @@
     "exports": {
         "./utils": {
             "import": "./dist/utils/index.js",
-            "require": "./dist/utils/index.cjs"
+            "require": "./dist/utils/index.cjs",
+            "types": "./dist/utils/index.d.ts"
         },
         "./dom": {
             "import": "./dist/dom/index.js",
-            "require": "./dist/dom/index.cjs"
+            "require": "./dist/dom/index.cjs",
+            "types": "./dist/dom/index.d.ts"
         },
         "./guard": {
             "import": "./dist/guard.js",
-            "require": "./dist/guard.cjs"
+            "require": "./dist/guard.cjs",
+            "types": "./dist/guard.d.ts"
         },
         "./path": {
             "import": "./dist/path.js",
-            "require": "./dist/path.cjs"
+            "require": "./dist/path.cjs",
+            "types": "./dist/path.d.ts"
+        },
+        "./pathname": {
+            "import": "./dist/pathname.js",
+            "require": "./dist/pathname.cjs",
+            "types": "./dist/pathname.d.ts"
         },
         "./stores": {
             "import": "./dist/stores.js",
-            "require": "./dist/stores.cjs"
+            "require": "./dist/stores.cjs",
+            "types": "./dist/stores.d.ts"
         },
         "./compiler": {
             "import": "./dist/compiler/index.js",
-            "require": "./dist/compiler/index.cjs"
+            "require": "./dist/compiler/index.cjs",
+            "types": "./dist/compiler/index.d.ts"
         },
         "./definition": {
             "import": "./dist/definition/index.js",
-            "require": "./dist/definition/index.cjs"
+            "require": "./dist/definition/index.cjs",
+            "types": "./dist/definition/index.d.ts"
         }
     },
     "typesVersions": {
@@ -60,6 +72,9 @@
             ],
             "path": [
                 "dist/path.d.ts"
+            ],
+            "pathname": [
+                "dist/pathname.d.ts"
             ],
             "stores": [
                 "dist/stores.d.ts"

@@ -1,4 +1,4 @@
-import Ajv, { type ErrorObject } from 'ajv'
+import Ajv, { ValidateFunction, type ErrorObject } from 'ajv'
 import addFormats from 'ajv-formats'
 import { writable, type Readable, type Subscriber } from './stores'
 import { extrude, read } from './path'
@@ -27,8 +27,7 @@ export interface GuardValue<T> {
 }
 
 export function createGuard<T>(target: Target<T>, schema: any) {
-    const validate = ajv.compile(schema)
-
+    let validate: ValidateFunction
     let value: T
     let error: any
 
@@ -43,6 +42,8 @@ export function createGuard<T>(target: Target<T>, schema: any) {
     })
 
     function set({ value }: GuardValue<T>) {
+        validate ??= ajv.compile(schema)
+
         if (validate(value)) {
             setImmutable(value, undefined)
             target.set(value)
