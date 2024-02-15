@@ -28,6 +28,8 @@ function mergeObject(target: object, source: object, option: MergeOption): objec
             //skip
         } else if (mergedValue === targetValue && !option?.forceUpdate) {
             // skip
+        } else if (mergedValue === null && targetValue === undefined && option?.deleteNullProps) {
+            // skip
         } else if (mergedValue === null && option?.deleteNullProps) {
             targetCopy ??= { ...target }
             delete targetCopy[sourceKey]

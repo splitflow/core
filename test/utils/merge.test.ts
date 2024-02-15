@@ -61,6 +61,13 @@ describe('.merge()', () => {
             const result = merge(target, source, { deleteNullProps: true })
             expect(result).toBe(null)
         })
+        it('returns target when no ops ', () => {
+            const target = { name: 'bob' }
+            const source = { age: null }
+            const result = merge(target, source, { deleteNullProps: true })
+            expect(result).to.deep.equal({ name: 'bob' })
+            expect(result).toBe(target)
+        })
     })
     describe('with forceUpdate = true', () => {
         it('returns new instance even if there are no ops', () => {
