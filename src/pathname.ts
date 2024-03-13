@@ -71,7 +71,9 @@ export function wildcardPatterns(pathname: string) {
 export function search(params: Record<string, any>) {
     const tokens = []
     for (const [key, value] of Object.entries(params)) {
-        tokens.push(`${key}=${value}`)
+        if (value !== undefined) {
+            tokens.push(`${key}=${value}`)
+        }
     }
     if (tokens.length > 0) return '?' + tokens.join('&')
     return ''
