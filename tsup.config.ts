@@ -6,6 +6,7 @@ export default defineConfig({
     "src/dom/index.ts",
     "src/guard.ts",
     "src/path.ts",
+    "src/pathname.ts",
     "src/stores.ts",
     "src/compiler/index.ts",
     "src/definition/index.ts",
